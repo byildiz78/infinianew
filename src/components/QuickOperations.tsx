@@ -3,24 +3,24 @@ import { Search, Clipboard, DollarSign, FileX } from 'lucide-react';
 
 const QuickOperations: React.FC = () => {
   return (
-    <div className="glass-darker rounded-lg p-3 shadow-xl h-[calc(100vh-24rem)]">
-      <h2 className="text-lg font-bold text-white mb-3">Hızlı İşlemler</h2>
-      <div className="grid grid-cols-2 gap-3">
-        <button className="btn-green flex flex-col items-center justify-center text-white p-3 rounded-lg">
-          <Search size={24} />
-          <span className="mt-1 text-xs">Çağır</span>
+    <div className="glass-darker h-full rounded-lg p-4 shadow-xl">
+      <h2 className="text-xl font-bold text-white mb-4">Hızlı İşlemler</h2>
+      <div className="grid grid-cols-2 gap-4">
+        <button className="btn-green flex flex-col items-center justify-center text-white p-4 rounded-lg">
+          <Search size={32} className="mb-2" />
+          <span className="text-sm">Çağır</span>
         </button>
-        <button className="btn-green flex flex-col items-center justify-center text-white p-3 rounded-lg">
-          <Clipboard size={24} />
-          <span className="mt-1 text-xs">Paket Durumu</span>
+        <button className="btn-green flex flex-col items-center justify-center text-white p-4 rounded-lg">
+          <Clipboard size={32} className="mb-2" />
+          <span className="text-sm">Paket Durumu</span>
         </button>
-        <button className="btn-green flex flex-col items-center justify-center text-white p-3 rounded-lg">
-          <DollarSign size={24} />
-          <span className="mt-1 text-xs">Ödeme</span>
+        <button className="btn-green flex flex-col items-center justify-center text-white p-4 rounded-lg">
+          <DollarSign size={32} className="mb-2" />
+          <span className="text-sm">Ödeme</span>
         </button>
-        <button className="btn-green flex flex-col items-center justify-center text-white p-3 rounded-lg">
-          <FileX size={24} />
-          <span className="mt-1 text-xs">Çek Kapat</span>
+        <button className="btn-green flex flex-col items-center justify-center text-white p-4 rounded-lg">
+          <FileX size={32} className="mb-2" />
+          <span className="text-sm">Çek Kapat</span>
         </button>
       </div>
     </div>

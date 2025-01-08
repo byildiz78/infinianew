@@ -9,7 +9,8 @@ import {
   Fish,
   Beef,
   Croissant,
-  Wine
+  Wine,
+  Sandwich
 } from 'lucide-react';
 import { Category } from '../types';
 
@@ -26,6 +27,66 @@ export const categories: Category[] = [
       { id: 'americano', name: 'Americano', price: 18, icon: Coffee },
       { id: 'mocha', name: 'Mocha', price: 25, icon: Coffee },
       { id: 'turkish-coffee', name: 'Türk Kahvesi', price: 15, icon: Coffee },
+    ]
+  },
+  {
+    id: 'combos',
+    name: 'Menüler',
+    icon: Sandwich,
+    page: 1,
+    products: [
+      {
+        id: 'classic-burger-menu',
+        name: 'Klasik Burger Menü',
+        price: 150,
+        icon: Sandwich,
+        isCombo: true,
+        comboOptions: {
+          mainItems: [
+            { id: 'classic-burger', name: 'Klasik Burger' },
+            { id: 'cheese-burger', name: 'Cheese Burger', extraPrice: 10 },
+            { id: 'double-burger', name: 'Double Burger', extraPrice: 25 }
+          ],
+          sides: [
+            { id: 'regular-fries', name: 'Patates Kızartması' },
+            { id: 'curly-fries', name: 'Çıtır Patates', extraPrice: 5 },
+            { id: 'sweet-potato-fries', name: 'Tatlı Patates', extraPrice: 15 }
+          ],
+          drinks: [
+            { id: 'cola', name: 'Kola' },
+            { id: 'fanta', name: 'Fanta' },
+            { id: 'sprite', name: 'Sprite' },
+            { id: 'ayran', name: 'Ayran' },
+            { id: 'ice-tea', name: 'Ice Tea' }
+          ]
+        }
+      },
+      {
+        id: 'chicken-menu',
+        name: 'Tavuk Menü',
+        price: 130,
+        icon: Sandwich,
+        isCombo: true,
+        comboOptions: {
+          mainItems: [
+            { id: 'grilled-chicken', name: 'Izgara Tavuk' },
+            { id: 'crispy-chicken', name: 'Çıtır Tavuk', extraPrice: 10 },
+            { id: 'spicy-chicken', name: 'Acılı Tavuk', extraPrice: 10 }
+          ],
+          sides: [
+            { id: 'regular-fries', name: 'Patates Kızartması' },
+            { id: 'rice', name: 'Pilav' },
+            { id: 'mashed-potato', name: 'Patates Püresi', extraPrice: 5 }
+          ],
+          drinks: [
+            { id: 'cola', name: 'Kola' },
+            { id: 'fanta', name: 'Fanta' },
+            { id: 'sprite', name: 'Sprite' },
+            { id: 'ayran', name: 'Ayran' },
+            { id: 'ice-tea', name: 'Ice Tea' }
+          ]
+        }
+      }
     ]
   },
   {
