@@ -1,5 +1,26 @@
 import { type IconType } from 'lucide-react';
 
+export type TableStatus = 'empty' | 'occupied';
+
+export interface TableData {
+  id: number;
+  number: string;
+  seats: number;
+  status: TableStatus;
+  occupiedInfo?: {
+    waiter: string;
+    occupiedTime: number;
+    currentGuests: number;
+  };
+}
+
+export interface Section {
+  id: string;
+  name: string;
+  icon: IconType;
+  tables: TableData[];
+}
+
 export interface Product {
   id: string;
   name: string;
@@ -34,8 +55,8 @@ export interface OrderItem {
   name: string;
   price: number;
   quantity: number;
-  addedAt: string;
-  addedBy: string;
+  addedAt?: string;
+  addedBy?: string;
   discount?: number;
   comboSelections?: {
     mainItem: ComboItem;

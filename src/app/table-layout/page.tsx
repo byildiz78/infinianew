@@ -1,6 +1,6 @@
 'use client';
 
-import TableLayoutPage from '@/components/pages/TableLayoutPage';
+import TableLayoutPage from '../../pages/TableLayoutPage';
 
 export default function TableLayout() {
   return <TableLayoutPage />;

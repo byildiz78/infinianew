@@ -1,19 +1,20 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { Calendar, Receipt, Home, Palmtree, Warehouse, Users } from 'lucide-react';
 import TableComponent from '../components/TableComponent';
 import OccupancyStats from '../components/OccupancyStats';
+import { Section, TableData, TableStatus } from '../types';
 
-const sections = [
+const sections: Section[] = [
   {
     id: 'garden',
     name: 'Bahçe',
     icon: Palmtree,
-    tables: Array.from({ length: 15 }, (_, i) => ({
+    tables: Array.from({ length: 15 }, (_, i): TableData => ({
       id: i + 1,
       number: `B${i + 1}`,
       seats: Math.random() > 0.5 ? 4 : 6,
-      status: Math.random() > 0.6 ? 'occupied' : 'empty',
+      status: (Math.random() > 0.6 ? 'occupied' : 'empty') as TableStatus,
       occupiedInfo: Math.random() > 0.6 ? {
         waiter: ['Ahmet', 'Mehmet', 'Ayşe', 'Fatma'][Math.floor(Math.random() * 4)],
         occupiedTime: Math.floor(Math.random() * 180),
@@ -25,11 +26,11 @@ const sections = [
     id: 'salon',
     name: 'Salon',
     icon: Home,
-    tables: Array.from({ length: 20 }, (_, i) => ({
+    tables: Array.from({ length: 20 }, (_, i): TableData => ({
       id: i + 1,
       number: `S${i + 1}`,
       seats: Math.random() > 0.5 ? 4 : 6,
-      status: Math.random() > 0.6 ? 'occupied' : 'empty',
+      status: (Math.random() > 0.6 ? 'occupied' : 'empty') as TableStatus,
       occupiedInfo: Math.random() > 0.6 ? {
         waiter: ['Ahmet', 'Mehmet', 'Ayşe', 'Fatma'][Math.floor(Math.random() * 4)],
         occupiedTime: Math.floor(Math.random() * 180),
@@ -41,11 +42,11 @@ const sections = [
     id: 'basement',
     name: 'Alt Kat',
     icon: Warehouse,
-    tables: Array.from({ length: 12 }, (_, i) => ({
+    tables: Array.from({ length: 12 }, (_, i): TableData => ({
       id: i + 1,
       number: `A${i + 1}`,
       seats: Math.random() > 0.5 ? 4 : 6,
-      status: Math.random() > 0.6 ? 'occupied' : 'empty',
+      status: (Math.random() > 0.6 ? 'occupied' : 'empty') as TableStatus,
       occupiedInfo: Math.random() > 0.6 ? {
         waiter: ['Ahmet', 'Mehmet', 'Ayşe', 'Fatma'][Math.floor(Math.random() * 4)],
         occupiedTime: Math.floor(Math.random() * 180),
@@ -56,6 +57,7 @@ const sections = [
 ];
 
 const TableLayoutPage: React.FC = () => {
+  const router = useRouter();
   const [activeSection, setActiveSection] = useState(sections[0].id);
   const currentSection = sections.find(s => s.id === activeSection) || sections[0];
   
@@ -71,7 +73,7 @@ const TableLayoutPage: React.FC = () => {
       tableSum + (table.occupiedInfo?.currentGuests || 0), 0), 0);
 
   const handleTableClick = (tableNumber: string) => {
-    console.log(`Clicked table ${tableNumber}`);
+    router.push(`/order/${tableNumber}`);
   };
 
   return (
@@ -86,11 +88,12 @@ const TableLayoutPage: React.FC = () => {
         {/* Tables Grid */}
         <div className="grid grid-cols-4 gap-6 p-4">
           {currentSection.tables.map(table => (
-            <TableComponent
-              key={table.id}
-              table={table}
-              onClick={handleTableClick}
-            />
+            <div key={table.id} className="flex justify-center">
+              <TableComponent
+                table={table}
+                onClick={handleTableClick}
+              />
+            </div>
           ))}
         </div>
       </div>
@@ -99,51 +102,67 @@ const TableLayoutPage: React.FC = () => {
       <div className="w-96 bg-gray-900/90 p-6 space-y-8 border-l border-gray-800">
         {/* Section Navigation */}
         <div className="space-y-3">
-          <h3 className="text-white font-semibold mb-4 px-2">Bölümler</h3>
-          <div className="space-y-3">
-            {sections.map(section => (
-              <button
-                key={section.id}
-                onClick={() => setActiveSection(section.id)}
-                className={`w-full flex items-center gap-3 px-6 py-4 rounded-xl text-lg font-medium transition-all
-                  ${activeSection === section.id 
-                    ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/30' 
-                    : 'bg-gray-800/50 text-gray-300 hover:bg-gray-800/70'}`}
-              >
-                <section.icon size={24} />
-                <span>{section.name}</span>
-              </button>
-            ))}
+          <h2 className="text-xl font-semibold text-white mb-4">Bölümler</h2>
+          {sections.map(section => (
+            <button
+              key={section.id}
+              onClick={() => setActiveSection(section.id)}
+              className={`w-full flex items-center space-x-3 p-3 rounded-lg transition-colors ${
+                activeSection === section.id
+                  ? 'bg-blue-600 text-white'
+                  : 'text-gray-400 hover:bg-gray-800/50 hover:text-white'
+              }`}
+            >
+              <section.icon size={20} />
+              <span>{section.name}</span>
+            </button>
+          ))}
+        </div>
+
+        {/* Stats */}
+        <div className="space-y-6">
+          <h2 className="text-xl font-semibold text-white">İstatistikler</h2>
+          
+          {/* Current Section Stats */}
+          <div className="bg-gray-800/50 p-4 rounded-lg">
+            <h3 className="text-lg font-medium text-white mb-3">{currentSection.name}</h3>
+            <OccupancyStats
+              occupiedTables={occupiedTables.length}
+              totalTables={currentSection.tables.length}
+              occupiedSeats={occupiedSeats}
+              totalSeats={totalSeats}
+            />
+          </div>
+
+          {/* Overall Stats */}
+          <div className="bg-gray-800/50 p-4 rounded-lg">
+            <h3 className="text-lg font-medium text-white mb-3">Genel Durum</h3>
+            <OccupancyStats
+              occupiedTables={allOccupiedTables.length}
+              totalTables={sections.reduce((sum, s) => sum + s.tables.length, 0)}
+              occupiedSeats={allOccupiedSeats}
+              totalSeats={allTotalSeats}
+            />
           </div>
         </div>
 
-        {/* Statistics */}
-        <div className="space-y-4">
-          <OccupancyStats
-            sectionStats={{
-              totalTables: currentSection.tables.length,
-              occupiedTables: occupiedTables.length,
-              totalSeats,
-              occupiedSeats
-            }}
-            restaurantStats={{
-              totalTables: sections.reduce((sum, section) => sum + section.tables.length, 0),
-              occupiedTables: allOccupiedTables.length,
-              totalSeats: allTotalSeats,
-              occupiedSeats: allOccupiedSeats
-            }}
-          />
-        </div>
-
-        {/* Action Buttons */}
+        {/* Quick Actions */}
         <div className="space-y-3">
-          <button className="w-full flex items-center gap-3 px-6 py-4 rounded-xl bg-green-600 text-white hover:bg-green-700 transition-colors">
-            <Calendar size={20} />
-            <span className="font-medium">Rezervasyonlar</span>
-          </button>
-          <button className="w-full flex items-center gap-3 px-6 py-4 rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition-colors">
+          <h2 className="text-xl font-semibold text-white mb-4">Hızlı İşlemler</h2>
+          <button
+            onClick={() => router.push('/takeaway')}
+            className="w-full flex items-center justify-center space-x-2 p-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+          >
             <Receipt size={20} />
-            <span className="font-medium">Hesap Al</span>
+            <span>Paket Sipariş</span>
+          </button>
+          <button className="w-full flex items-center justify-center space-x-2 p-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+            <Calendar size={20} />
+            <span>Rezervasyonlar</span>
+          </button>
+          <button className="w-full flex items-center justify-center space-x-2 p-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+            <Users size={20} />
+            <span>Personel</span>
           </button>
         </div>
       </div>
