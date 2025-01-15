@@ -17,7 +17,7 @@ const sections = [
       seats: Math.random() > 0.5 ? 4 : 6,
       status: Math.random() > 0.6 ? 'occupied' : 'empty',
       occupiedInfo: Math.random() > 0.6 ? {
-        waiter: ['Ahmet', 'Mehmet', 'Ayşe', 'Fatma'][Math.floor(Math.random() * 4)],
+        waiter: ['Ahmet', 'Mehmet', 'Ayşe', 'Fatma...'][Math.floor(Math.random() * 4)],
         occupiedTime: Math.floor(Math.random() * 180),
         currentGuests: Math.floor(Math.random() * 4) + 1,
       } : undefined,
