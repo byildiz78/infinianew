@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { Plus, Minus, CreditCard, Wallet, DollarSign, Percent, Clock, User, ChevronDown, ChevronUp } from 'lucide-react';
 import { OrderItem, CartDiscount } from '../types';
+import BarcodeInput from './BarcodeInput';
 
 interface CartProps {
   orderItems: OrderItem[];
@@ -9,9 +10,18 @@ interface CartProps {
   onIncrement: (productId: string) => void;
   onDecrement: (productId: string) => void;
   onPayment: (type: string) => void;
+  onBarcodeSubmit: (barcode: string) => void;
 }
 
-const Cart: React.FC<CartProps> = ({ orderItems, discount, tableId, onIncrement, onDecrement, onPayment }) => {
+const Cart: React.FC<CartProps> = ({ 
+  orderItems, 
+  discount, 
+  tableId, 
+  onIncrement, 
+  onDecrement, 
+  onPayment,
+  onBarcodeSubmit 
+}) => {
   const [expandedItems, setExpandedItems] = React.useState<string[]>([]);
   const cartItemsRef = useRef<HTMLDivElement>(null);
   const lastItemRef = useRef<HTMLDivElement>(null);
@@ -41,9 +51,10 @@ const Cart: React.FC<CartProps> = ({ orderItems, discount, tableId, onIncrement,
       <div className="p-4 border-b border-white/10 bg-gradient-to-br from-blue-900/50 to-blue-800/50">
         <div className="bg-gradient-to-br from-gray-800/80 to-gray-700/80 rounded-xl p-4 shadow-lg border border-white/10">
           <div className="text-center mb-3">
-            <h2 className="text-2xl font-bold text-white">Masa {tableId}</h2>
+            <h2 className="text-2xl font-bold text-white">Barkod</h2>
             <div className="h-0.5 w-16 bg-blue-500 mx-auto mt-2"></div>
           </div>
+          <BarcodeInput onSubmit={onBarcodeSubmit} />
         </div>
       </div>
 

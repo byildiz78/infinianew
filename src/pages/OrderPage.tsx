@@ -24,6 +24,25 @@ const OrderPage: React.FC<{ tableId?: string }> = ({ tableId }) => {
   const [isComboModalOpen, setIsComboModalOpen] = useState(false);
   const [selectedComboProduct, setSelectedComboProduct] = useState<Product | null>(null);
 
+  // Function to find product by barcode across all categories
+  const findProductByBarcode = (barcode: string): Product | null => {
+    for (const category of categories) {
+      const product = category.products.find(p => p.barcode === barcode);
+      if (product) return product;
+    }
+    return null;
+  };
+
+  const handleBarcodeSubmit = (barcode: string) => {
+    const product = findProductByBarcode(barcode);
+    if (product) {
+      addToOrder(product);
+    } else {
+      // TODO: Add error notification
+      console.log('Ürün bulunamadı:', barcode);
+    }
+  };
+
   // Filter categories based on current page
   const currentCategories = categories.filter(cat => cat.page === currentPage);
 
@@ -146,6 +165,8 @@ const OrderPage: React.FC<{ tableId?: string }> = ({ tableId }) => {
           }}
           onDecrement={removeFromOrder}
           onPayment={handlePayment}
+          tableId={tableId || ''}
+          onBarcodeSubmit={handleBarcodeSubmit}
         />
 
         {/* Modals */}

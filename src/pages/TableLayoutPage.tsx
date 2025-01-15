@@ -1,65 +1,63 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Calendar, Receipt, Home, Palmtree, Warehouse, Users } from 'lucide-react';
 import TableComponent from '../components/TableComponent';
 import OccupancyStats from '../components/OccupancyStats';
 import { Section, TableData, TableStatus } from '../types';
 
-const sections: Section[] = [
+const sectionConfigs = [
   {
     id: 'garden',
     name: 'Bahçe',
     icon: Palmtree,
-    tables: Array.from({ length: 15 }, (_, i): TableData => ({
-      id: i + 1,
-      number: `B${i + 1}`,
-      seats: Math.random() > 0.5 ? 4 : 6,
-      status: (Math.random() > 0.6 ? 'occupied' : 'empty') as TableStatus,
-      occupiedInfo: Math.random() > 0.6 ? {
-        waiter: ['Ahmet', 'Mehmet', 'Ayşe', 'Fatma'][Math.floor(Math.random() * 4)],
-        occupiedTime: Math.floor(Math.random() * 180),
-        currentGuests: Math.floor(Math.random() * 4) + 1,
-      } : undefined,
-    })),
+    tableCount: 15,
+    prefix: 'B'
   },
   {
     id: 'salon',
     name: 'Salon',
     icon: Home,
-    tables: Array.from({ length: 20 }, (_, i): TableData => ({
-      id: i + 1,
-      number: `S${i + 1}`,
-      seats: Math.random() > 0.5 ? 4 : 6,
-      status: (Math.random() > 0.6 ? 'occupied' : 'empty') as TableStatus,
-      occupiedInfo: Math.random() > 0.6 ? {
-        waiter: ['Ahmet', 'Mehmet', 'Ayşe', 'Fatma'][Math.floor(Math.random() * 4)],
-        occupiedTime: Math.floor(Math.random() * 180),
-        currentGuests: Math.floor(Math.random() * 4) + 1,
-      } : undefined,
-    })),
+    tableCount: 20,
+    prefix: 'S'
   },
   {
     id: 'basement',
     name: 'Alt Kat',
     icon: Warehouse,
-    tables: Array.from({ length: 12 }, (_, i): TableData => ({
-      id: i + 1,
-      number: `A${i + 1}`,
-      seats: Math.random() > 0.5 ? 4 : 6,
-      status: (Math.random() > 0.6 ? 'occupied' : 'empty') as TableStatus,
-      occupiedInfo: Math.random() > 0.6 ? {
-        waiter: ['Ahmet', 'Mehmet', 'Ayşe', 'Fatma'][Math.floor(Math.random() * 4)],
-        occupiedTime: Math.floor(Math.random() * 180),
-        currentGuests: Math.floor(Math.random() * 4) + 1,
-      } : undefined,
-    })),
-  },
+    tableCount: 12,
+    prefix: 'A'
+  }
 ];
+
+const generateTableData = (count: number, prefix: string): TableData[] => {
+  return Array.from({ length: count }, (_, i): TableData => ({
+    id: i + 1,
+    number: `${prefix}${i + 1}`,
+    seats: Math.random() > 0.5 ? 4 : 6,
+    status: (Math.random() > 0.6 ? 'occupied' : 'empty') as TableStatus,
+    occupiedInfo: Math.random() > 0.6 ? {
+      waiter: ['Ahmet', 'Mehmet', 'Ayşe', 'Fatma'][Math.floor(Math.random() * 4)],
+      occupiedTime: Math.floor(Math.random() * 180),
+      currentGuests: Math.floor(Math.random() * 4) + 1,
+    } : undefined,
+  }));
+};
 
 const TableLayoutPage: React.FC = () => {
   const router = useRouter();
-  const [activeSection, setActiveSection] = useState(sections[0].id);
-  const currentSection = sections.find(s => s.id === activeSection) || sections[0];
+  const [sections, setSections] = useState<Section[]>([]);
+  const [activeSection, setActiveSection] = useState('garden');
+
+  useEffect(() => {
+    // Client-side veri üretimi
+    const generatedSections = sectionConfigs.map(config => ({
+      ...config,
+      tables: generateTableData(config.tableCount, config.prefix)
+    }));
+    setSections(generatedSections);
+  }, []);
+
+  const currentSection = sections.find(s => s.id === activeSection) || sections[0] || { tables: [] };
   
   const occupiedTables = currentSection.tables.filter(t => t.status === 'occupied');
   const totalSeats = currentSection.tables.reduce((sum, table) => sum + table.seats, 0);

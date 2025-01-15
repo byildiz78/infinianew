@@ -1,5 +1,6 @@
 {
   "/page": "app/page.js",
-  "/recall/page": "app/recall/page.js",
-  "/table-layout/page": "app/table-layout/page.js"
+  "/table-layout/page": "app/table-layout/page.js",
+  "/order/[tableId]/page": "app/order/[tableId]/page.js",
+  "/takeaway/page": "app/takeaway/page.js"
 }

@@ -1,4 +1,4 @@
-import { type IconType } from 'lucide-react';
+import { LucideIcon } from 'lucide-react';
 
 export type TableStatus = 'empty' | 'occupied';
 
@@ -17,7 +17,7 @@ export interface TableData {
 export interface Section {
   id: string;
   name: string;
-  icon: IconType;
+  icon: LucideIcon;
   tables: TableData[];
 }
 
@@ -25,9 +25,10 @@ export interface Product {
   id: string;
   name: string;
   price: number;
-  icon: IconType;
+  icon: LucideIcon;
   isCombo?: boolean;
   comboOptions?: ComboOptions;
+  barcode?: string;
 }
 
 export interface ComboOptions {
@@ -45,7 +46,7 @@ export interface ComboItem {
 export interface Category {
   id: string;
   name: string;
-  icon: IconType;
+  icon: LucideIcon;
   page: number;
   products: Product[];
 }

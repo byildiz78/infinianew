@@ -21,12 +21,12 @@ export const categories: Category[] = [
     icon: Coffee,
     page: 1,
     products: [
-      { id: 'espresso', name: 'Espresso', price: 15, icon: Coffee },
-      { id: 'latte', name: 'Latte', price: 20, icon: Coffee },
-      { id: 'cappuccino', name: 'Cappuccino', price: 22, icon: Coffee },
-      { id: 'americano', name: 'Americano', price: 18, icon: Coffee },
-      { id: 'mocha', name: 'Mocha', price: 25, icon: Coffee },
-      { id: 'turkish-coffee', name: 'Türk Kahvesi', price: 15, icon: Coffee },
+      { id: 'espresso', name: 'Espresso', price: 15, icon: Coffee, barcode: '8680001' },
+      { id: 'latte', name: 'Latte', price: 20, icon: Coffee, barcode: '8680002' },
+      { id: 'cappuccino', name: 'Cappuccino', price: 22, icon: Coffee, barcode: '8680003' },
+      { id: 'americano', name: 'Americano', price: 18, icon: Coffee, barcode: '8680004' },
+      { id: 'mocha', name: 'Mocha', price: 25, icon: Coffee, barcode: '8680005' },
+      { id: 'turkish-coffee', name: 'Türk Kahvesi', price: 15, icon: Coffee, barcode: '8680006' },
     ]
   },
   {
@@ -95,11 +95,11 @@ export const categories: Category[] = [
     icon: Pizza,
     page: 1,
     products: [
-      { id: 'margherita', name: 'Margarita', price: 45, icon: Pizza },
-      { id: 'pepperoni', name: 'Pepperoni', price: 55, icon: Pizza },
-      { id: 'veggie', name: 'Vejeteryan', price: 50, icon: Pizza },
-      { id: 'bbq-chicken', name: 'BBQ Tavuk', price: 60, icon: Pizza },
-      { id: 'four-cheese', name: 'Dört Peynirli', price: 65, icon: Pizza },
+      { id: 'margherita', name: 'Margarita', price: 45, icon: Pizza, barcode: '8680010' },
+      { id: 'pepperoni', name: 'Pepperoni', price: 55, icon: Pizza, barcode: '8680011' },
+      { id: 'veggie', name: 'Vejeteryan', price: 50, icon: Pizza, barcode: '8680012' },
+      { id: 'bbq-chicken', name: 'BBQ Tavuk', price: 60, icon: Pizza, barcode: '8680013' },
+      { id: 'four-cheese', name: 'Dört Peynirli', price: 65, icon: Pizza, barcode: '8680014' },
     ]
   },
   {
