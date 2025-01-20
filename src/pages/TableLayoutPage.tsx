@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Calendar, Receipt, Home, Palmtree, Warehouse, Users } from 'lucide-react';
@@ -27,7 +29,7 @@ const sectionConfigs = [
     tableCount: 12,
     prefix: 'A'
   }
-];
+] as const;
 
 const generateTableData = (count: number, prefix: string): TableData[] => {
   return Array.from({ length: count }, (_, i): TableData => ({
@@ -49,7 +51,6 @@ const TableLayoutPage: React.FC = () => {
   const [activeSection, setActiveSection] = useState('garden');
 
   useEffect(() => {
-    // Client-side veri üretimi
     const generatedSections = sectionConfigs.map(config => ({
       ...config,
       tables: generateTableData(config.tableCount, config.prefix)
@@ -57,36 +58,24 @@ const TableLayoutPage: React.FC = () => {
     setSections(generatedSections);
   }, []);
 
-  const currentSection = sections.find(s => s.id === activeSection) || sections[0] || { tables: [] };
-  
-  const occupiedTables = currentSection.tables.filter(t => t.status === 'occupied');
-  const totalSeats = currentSection.tables.reduce((sum, table) => sum + table.seats, 0);
-  const occupiedSeats = occupiedTables.reduce((sum, table) => sum + (table.occupiedInfo?.currentGuests || 0), 0);
-  
-  const allOccupiedTables = sections.flatMap(s => s.tables.filter(t => t.status === 'occupied'));
-  const allTotalSeats = sections.reduce((sum, section) => 
-    sum + section.tables.reduce((tableSum, table) => tableSum + table.seats, 0), 0);
-  const allOccupiedSeats = sections.reduce((sum, section) => 
-    sum + section.tables.reduce((tableSum, table) => 
-      tableSum + (table.occupiedInfo?.currentGuests || 0), 0), 0);
+  const currentSection = sections.find(s => s.id === activeSection) || sections[0] || { 
+    id: '', 
+    name: '', 
+    icon: Palmtree, 
+    tables: [] 
+  };
 
   const handleTableClick = (tableNumber: string) => {
     router.push(`/order/${tableNumber}`);
   };
 
   return (
-    <div className="min-h-screen bg-gray-900/70 flex">
-      {/* Main Content */}
-      <div className="flex-1 p-6">
-        {/* Logo */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-white">RobotPOS</h1>
-        </div>
-
-        {/* Tables Grid */}
-        <div className="grid grid-cols-4 gap-6 p-4">
-          {currentSection.tables.map(table => (
-            <div key={table.id} className="flex justify-center">
+    <div className="flex h-full">
+      {/* Tables Grid */}
+      <div className="flex-1 p-6 overflow-hidden">
+        <div className="grid grid-cols-4 gap-6 h-full auto-rows-min">
+          {currentSection.tables?.map(table => (
+            <div key={table.id} className="aspect-square">
               <TableComponent
                 table={table}
                 onClick={handleTableClick}
@@ -97,71 +86,76 @@ const TableLayoutPage: React.FC = () => {
       </div>
 
       {/* Right Sidebar */}
-      <div className="w-96 bg-gray-900/90 p-6 space-y-8 border-l border-gray-800">
-        {/* Section Navigation */}
-        <div className="space-y-3">
-          <h2 className="text-xl font-semibold text-white mb-4">Bölümler</h2>
-          {sections.map(section => (
+      <div className="w-96 bg-gray-900/90 border-l border-gray-800">
+        <div className="h-full flex flex-col p-6">
+          {/* Section Navigation */}
+          <div className="mb-6">
+            <h2 className="text-xl font-semibold text-white mb-4">Bölümler</h2>
+            <div className="space-y-2">
+              {sections.map(section => (
+                <button
+                  key={section.id}
+                  onClick={() => setActiveSection(section.id)}
+                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${
+                    activeSection === section.id
+                      ? 'bg-blue-600 text-white'
+                      : 'text-gray-400 hover:bg-gray-800/50 hover:text-white'
+                  }`}
+                >
+                  <section.icon size={20} />
+                  <span>{section.name}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Stats */}
+          <div className="flex-1 space-y-6 min-h-0 overflow-auto">
+            {/* Current Section Stats */}
+            <div className="bg-gray-800/50 p-4 rounded-xl">
+              <h3 className="text-lg font-medium text-white mb-3">{currentSection.name}</h3>
+              <OccupancyStats
+                occupiedTables={currentSection.tables?.filter(t => t.status === 'occupied').length || 0}
+                totalTables={currentSection.tables?.length || 0}
+                occupiedSeats={currentSection.tables?.reduce((sum, table) => 
+                  sum + (table.occupiedInfo?.currentGuests || 0), 0) || 0}
+                totalSeats={currentSection.tables?.reduce((sum, table) => sum + table.seats, 0) || 0}
+              />
+            </div>
+
+            {/* Overall Stats */}
+            <div className="bg-gray-800/50 p-4 rounded-xl">
+              <h3 className="text-lg font-medium text-white mb-3">Genel Durum</h3>
+              <OccupancyStats
+                occupiedTables={sections.flatMap(s => s.tables).filter(t => t.status === 'occupied').length}
+                totalTables={sections.reduce((sum, s) => sum + s.tables.length, 0)}
+                occupiedSeats={sections.reduce((sum, section) => 
+                  sum + section.tables.reduce((tableSum, table) => 
+                    tableSum + (table.occupiedInfo?.currentGuests || 0), 0), 0)}
+                totalSeats={sections.reduce((sum, section) => 
+                  sum + section.tables.reduce((tableSum, table) => tableSum + table.seats, 0), 0)}
+              />
+            </div>
+          </div>
+
+          {/* Quick Actions */}
+          <div className="space-y-2 mt-6">
             <button
-              key={section.id}
-              onClick={() => setActiveSection(section.id)}
-              className={`w-full flex items-center space-x-3 p-3 rounded-lg transition-colors ${
-                activeSection === section.id
-                  ? 'bg-blue-600 text-white'
-                  : 'text-gray-400 hover:bg-gray-800/50 hover:text-white'
-              }`}
+              onClick={() => router.push('/takeaway')}
+              className="w-full flex items-center justify-center gap-2 p-3 bg-green-600 text-white rounded-xl hover:bg-green-700 transition-colors"
             >
-              <section.icon size={20} />
-              <span>{section.name}</span>
+              <Receipt size={20} />
+              <span>Paket Sipariş</span>
             </button>
-          ))}
-        </div>
-
-        {/* Stats */}
-        <div className="space-y-6">
-          <h2 className="text-xl font-semibold text-white">İstatistikler</h2>
-          
-          {/* Current Section Stats */}
-          <div className="bg-gray-800/50 p-4 rounded-lg">
-            <h3 className="text-lg font-medium text-white mb-3">{currentSection.name}</h3>
-            <OccupancyStats
-              occupiedTables={occupiedTables.length}
-              totalTables={currentSection.tables.length}
-              occupiedSeats={occupiedSeats}
-              totalSeats={totalSeats}
-            />
+            <button className="w-full flex items-center justify-center gap-2 p-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors">
+              <Calendar size={20} />
+              <span>Rezervasyonlar</span>
+            </button>
+            <button className="w-full flex items-center justify-center gap-2 p-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors">
+              <Users size={20} />
+              <span>Personel</span>
+            </button>
           </div>
-
-          {/* Overall Stats */}
-          <div className="bg-gray-800/50 p-4 rounded-lg">
-            <h3 className="text-lg font-medium text-white mb-3">Genel Durum</h3>
-            <OccupancyStats
-              occupiedTables={allOccupiedTables.length}
-              totalTables={sections.reduce((sum, s) => sum + s.tables.length, 0)}
-              occupiedSeats={allOccupiedSeats}
-              totalSeats={allTotalSeats}
-            />
-          </div>
-        </div>
-
-        {/* Quick Actions */}
-        <div className="space-y-3">
-          <h2 className="text-xl font-semibold text-white mb-4">Hızlı İşlemler</h2>
-          <button
-            onClick={() => router.push('/takeaway')}
-            className="w-full flex items-center justify-center space-x-2 p-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-          >
-            <Receipt size={20} />
-            <span>Paket Sipariş</span>
-          </button>
-          <button className="w-full flex items-center justify-center space-x-2 p-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-            <Calendar size={20} />
-            <span>Rezervasyonlar</span>
-          </button>
-          <button className="w-full flex items-center justify-center space-x-2 p-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-            <Users size={20} />
-            <span>Personel</span>
-          </button>
         </div>
       </div>
     </div>

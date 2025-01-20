@@ -11,20 +11,15 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
-    "/table-layout/page": [
+    "/template": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/table-layout/page.js"
+      "static/chunks/app/template.js"
     ],
-    "/order/[tableId]/page": [
+    "/expenses/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/order/[tableId]/page.js"
-    ],
-    "/takeaway/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/takeaway/page.js"
+      "static/chunks/app/expenses/page.js"
     ]
   }
 }

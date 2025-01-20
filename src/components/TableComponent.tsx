@@ -24,7 +24,7 @@ const TableComponent: React.FC<TableProps> = ({ table, onClick }) => {
     <div
       onClick={() => onClick(table.number)}
       className={`
-        w-48 h-48 rounded-xl border-2 p-4
+        w-full h-full rounded-xl border-2 p-4
         flex flex-col justify-between
         cursor-pointer transition-all duration-300
         ${getStatusColor(table.status)}
@@ -53,7 +53,7 @@ const TableComponent: React.FC<TableProps> = ({ table, onClick }) => {
 
             {/* Center Content - Table Number and Waiter */}
             <div className="flex-1 flex flex-col items-center justify-center">
-              <span className="text-5xl font-bold text-white mb-3">
+              <span className="text-4xl font-bold text-white mb-3">
                 {table.number}
               </span>
               <div className="bg-blue-800/30 rounded-lg px-3 py-1 flex items-center space-x-1.5">
@@ -66,7 +66,7 @@ const TableComponent: React.FC<TableProps> = ({ table, onClick }) => {
           <>
             {/* Empty Table Info */}
             <div className="flex-1 flex flex-col items-center justify-center space-y-2">
-              <span className="text-4xl font-bold text-gray-400">
+              <span className="text-3xl font-bold text-gray-400">
                 {table.number}
               </span>
               <div className="text-center space-y-1">

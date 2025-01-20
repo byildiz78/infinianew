@@ -5,15 +5,24 @@ import CallList from '../components/CallList';
 import CashierOperations from '../components/CashierOperations';
 
 const HomePage: React.FC = () => {
-  console.log('HomePage component rendered');
   return (
-    <div className="flex-grow p-4 grid grid-cols-3 gap-4">
-      <div className="flex flex-col justify-between">
-        <SalesOperations />
-        <CashierOperations />
+    <div className="container mx-auto px-8 py-8 h-full">
+      <div className="grid grid-cols-3 gap-8 h-full">
+        <div className="space-y-8">
+          <div className="h-[calc(70%)]">
+            <SalesOperations />
+          </div>
+          <div className="h-[calc(30%-2rem)]">
+            <CashierOperations />
+          </div>
+        </div>
+        <div className="h-full">
+          <QuickOperations />
+        </div>
+        <div className="h-full">
+          <CallList />
+        </div>
       </div>
-      <QuickOperations />
-      <CallList />
     </div>
   );
 };

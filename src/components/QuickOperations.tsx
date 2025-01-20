@@ -20,7 +20,10 @@ const QuickOperations: React.FC = () => {
           <Clipboard size={32} className="mb-2" />
           <span className="text-sm">Paket Durumu</span>
         </button>
-        <button className="btn-green flex flex-col items-center justify-center text-white p-4 rounded-lg">
+        <button 
+          onClick={() => router.push('/expenses')}
+          className="btn-green flex flex-col items-center justify-center text-white p-4 rounded-lg"
+        >
           <DollarSign size={32} className="mb-2" />
           <span className="text-sm">Ödeme</span>
         </button>
